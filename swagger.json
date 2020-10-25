@@ -1,0 +1,235 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Fire Fighter Game",
+        "description": "Game Api documentation.",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "tags": [{
+        "name": "Developers",
+        "description": "API for developers"
+    }],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "JWT": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "security": [{
+        "JWT": []
+    }],
+    "paths": {
+        "/api/user/login": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Login in system",
+                "parameters": [{
+                    "name": "model",
+                    "in": "body",
+                    "description": "player login",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/LoginRegisterViewModel"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+
+                        }
+
+                    }
+                }
+            }
+        },
+        "/api/user/register": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Create a new user in system",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [{
+                    "name": "model",
+                    "in": "body",
+                    "description": "player register",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/LoginRegisterViewModel"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+
+                        }
+
+                    }
+                }
+            }
+        },
+        "/api/player/updateUsername": {
+            "put": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Update username in system",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [{
+                    "JWT": []
+                }],
+                "parameters": [{
+                    "name": "model",
+                    "in": "body",
+                    "description": "player update",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/UpdateUsernameViewModel"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ProfileResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+
+                        }
+
+                    }
+                }
+            }
+        },
+        "/api/player/getProfile": {
+            "get": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get profile in system",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [{
+                    "JWT": []
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ProfileResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+
+                        }
+
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "LoginRegisterViewModel": {
+            "type": "object",
+            "properties": {
+                "deviceId": {
+                    "type": "string"
+                }
+            }
+        },
+        "UpdateUsernameViewModel": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "LoginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "isError": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "ProfileResponse": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "isError": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "isError": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}
