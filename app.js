@@ -1,7 +1,12 @@
 const express = require('express');
-const http = require('http');
+const app = express();
+const server = require('http').Server(app);
 const socketIo = require('socket.io');
 const mongoose = require('mongoose');
+
+const path = require('path');
+
+const Server = require('./models/server/Server');
 
 //// swagger ////
 
@@ -14,9 +19,6 @@ const authRoute = require('./controllers/authControllers');
 const playerRoute = require('./controllers/playerControllers');
 
 
-const app = express();
-
-const server = http.createServer(app);
 
 
 var options = {
@@ -54,6 +56,8 @@ mongoose.connect('mongodb+srv://kadirogreten:89892dbc@gamecluster.l7pqg.mongodb.
 
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
@@ -61,7 +65,37 @@ app.use('/api/user', authRoute);
 
 app.use('/api/player', playerRoute);
 
+let gameServer = new Server();
 
+setInterval(() => {
+    gameServer.onUpdate();
+}, 100, 0);
+
+
+io.on('connection', (socket) => {
+
+
+    let connection = gameServer.onConnected(socket);
+
+    //console.log(connection);
+
+    connection.createEvents();
+
+    connection.socket.emit('register', {
+        'id': connection.player.id,
+        'username': connection.player.username
+    });
+
+    connection.socket.broadcast.emit('register', {
+        'id': connection.player.id,
+        'username': connection.player.username
+    });
+
+    console.log('io connected: ' + new Date().toLocaleString('tr-TR', {
+        timeZone: 'Europe/Istanbul'
+    }) + ' id: ' + socket.handshake.query['id']);
+
+});
 
 
 

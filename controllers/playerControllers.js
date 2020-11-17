@@ -1,9 +1,6 @@
 const router = require('express').Router();
 const verified = require('../utils/verifyToken');
 const User = require('../models/User');
-const {
-    date
-} = require('@hapi/joi');
 
 router.get('/getProfile', verified, async (req, res) => {
     const user = await User.findOne({
